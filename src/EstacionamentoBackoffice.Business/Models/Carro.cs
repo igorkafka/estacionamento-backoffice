@@ -11,6 +11,15 @@ namespace EstacionamentoBackoffice.Business.Models
         public string Placa { get; set; }
         public string Modelo { get; set; }
         public IEnumerable<Passagem> Passagens { get; set; }
+        public static class CarroFactory
+        {
+            public static Carro NovoCarro()
+            {
+                var carro = new Carro();
+
+                return carro;
+            }
+        }
 
     }
 }

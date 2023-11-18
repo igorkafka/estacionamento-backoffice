@@ -25,7 +25,7 @@ namespace EstacionamentoBackoffice.Domain.Tests
             // Act
 
             // Assert
-            Assert.Equal(passagem.PrecoTotal, 42);
+            Assert.Equal(42, passagem.PrecoTotal);
         }
         [Fact(DisplayName = "Realizar Passagem de mais de Uma Hora I")]
         [Trait("Categoria", "Passagem")]
@@ -38,7 +38,7 @@ namespace EstacionamentoBackoffice.Domain.Tests
             // Act
 
             // Assert
-            Assert.Equal(passagem.PrecoTotal, 47);
+            Assert.Equal(47, passagem.PrecoTotal);
         }
         [Fact(DisplayName = "Realizar Passagem de mais de Uma Hora II")]
         [Trait("Categoria", "Passagem")]
@@ -51,7 +51,7 @@ namespace EstacionamentoBackoffice.Domain.Tests
             // Act
 
             // Assert
-            Assert.Equal(passagem.PrecoTotal, 52);
+            Assert.Equal(52, passagem.PrecoTotal);
         }
         [Fact(DisplayName = "Realizar Passagem de mais de Uma Hora III")]
         [Trait("Categoria", "Passagem")]
@@ -64,7 +64,7 @@ namespace EstacionamentoBackoffice.Domain.Tests
             // Act
 
             // Assert
-            Assert.Equal(passagem.PrecoTotal, 62);
+            Assert.Equal(62, passagem.PrecoTotal);
         }
         [Fact(DisplayName = "Realizar Passagem de mais de Uma Hora IV"), TestPriority(1)]
         [Trait("Categoria", "Passagem")]
@@ -77,7 +77,7 @@ namespace EstacionamentoBackoffice.Domain.Tests
             // Act
 
             // Assert
-            Assert.Equal(passagem.PrecoTotal, 67);
+            Assert.Equal(67, passagem.PrecoTotal);
         }
         [Fact(DisplayName = "Realizar Passagem Mensalista"), TestPriority(1)]
         [Trait("Categoria", "Passagem")]

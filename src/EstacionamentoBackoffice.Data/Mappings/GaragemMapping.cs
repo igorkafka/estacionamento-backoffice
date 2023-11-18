@@ -15,6 +15,9 @@ namespace EstacionamentoBackoffice.Data.Mappings
         {
             builder.HasKey(p => p.Id);
 
+            builder.Property(c => c.Nome)
+            .IsRequired()
+            .HasColumnType("varchar(50)");
 
             builder.ToTable("Garagens");
         }

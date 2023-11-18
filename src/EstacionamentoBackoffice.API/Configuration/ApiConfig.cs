@@ -1,6 +1,4 @@
 ﻿using EstacionamentoBackoffice.API.Extensions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EstacionamentoBackoffice.API.Configuration
@@ -76,7 +74,6 @@ namespace EstacionamentoBackoffice.API.Configuration
             app.UseAuthorization();
 
             app.UseStaticFiles();
-
 
             return app;
         }

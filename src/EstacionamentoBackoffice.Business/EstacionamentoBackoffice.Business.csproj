@@ -9,10 +9,5 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="10.3.6" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Models\Validations\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
 
 </Project>

@@ -26,7 +26,6 @@ builder.Services.AddApiConfig();
 
 builder.Services.AddSwaggerConfig();
 
-
 builder.Services.ResolveDependencies();
 
 var app = builder.Build();
@@ -37,5 +36,7 @@ var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionD
 app.UseApiConfig(app.Environment);
 
 app.UseSwaggerConfig(apiVersionDescriptionProvider);
+
+app.MapControllers();
 
 app.Run();

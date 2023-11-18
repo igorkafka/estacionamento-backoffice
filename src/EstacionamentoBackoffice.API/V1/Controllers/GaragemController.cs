@@ -35,11 +35,28 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
         {
             return _mapper.Map<IEnumerable<GaragemViewModel>>(await _garagemRepository.ObterTodos());
         }
+        private async Task<GaragemViewModel> ObterGaragemPorId(Guid id)
+        {
+            return _mapper.Map<GaragemViewModel>(await _garagemRepository.ObterPorId(id));
+        }
+        private async Task<GaragemViewModel> ObterGaragemPorCodigo(string codigo)
+        {
+            return _mapper.Map<GaragemViewModel>(await _garagemRepository.ObterPorCodigo(codigo));
+        }
 
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<GaragemViewModel>> ObterPorId(Guid id)
         {
-            var garagem = await ObterPorId(id);
+            var garagem = await ObterGaragemPorId(id);
+
+            if (garagem == null) return NotFound();
+
+            return garagem;
+        }
+        [HttpGet("{id:string}")]
+        public async Task<ActionResult<GaragemViewModel>> ObterPorCodigo(string id)
+        {
+            var garagem = await ObterGaragemPorCodigo(id);
 
             if (garagem == null) return NotFound();
 

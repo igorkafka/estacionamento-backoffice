@@ -40,6 +40,8 @@ namespace EstacionamentoBackoffice.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Codigo = table.Column<string>(type: "varchar(10)", nullable: false),
+                    Nome = table.Column<string>(type: "varchar(50)", nullable: false),
                     PrecoUmaHora = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PrecoHorasExtra = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PrecoMensalista = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
@@ -53,8 +55,7 @@ namespace EstacionamentoBackoffice.Data.Migrations
                 name: "Passagens",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GaragemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CarroId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DataHoraEntrada = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -91,6 +92,12 @@ namespace EstacionamentoBackoffice.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_FormasPagamento_Codigo",
                 table: "FormasPagamento",
+                column: "Codigo",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Garagens_Codigo",
+                table: "Garagens",
                 column: "Codigo",
                 unique: true);
 

@@ -42,7 +42,7 @@ namespace EstacionamentoBackoffice.API.Configuration
                     builder =>
                         builder
                             .WithMethods("GET")
-                            .WithOrigins("http://desenvolvedor.io")
+                            .WithOrigins("https://www.linkedin.com/in/igor-matheus-0453541b4/?locale=en_US")
                             .SetIsOriginAllowedToAllowWildcardSubdomains()
                             //.WithHeaders(HeaderNames.ContentType, "x-custom-header")
                             .AllowAnyHeader());

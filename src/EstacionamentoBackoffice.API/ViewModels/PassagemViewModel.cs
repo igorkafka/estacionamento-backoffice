@@ -9,10 +9,13 @@ namespace EstacionamentoBackoffice.API.ViewModels
         public Guid Id { get; set; }
         public Garagem Garagem { get; set; }
         public Guid GaragemId { get; set; }
+        public string CodigoGarragem { get; set; }
+        public string FormaPagamentoCodigo { get; set; }
         public Carro Carro { get; set; }
-        public Guid CarroId { get; set; }
+        public string Placa { get; set; }
         public DateTime DataHoraEntrada { get; set; }
         public DateTime DataHoraSaida { get; set; }
-        private decimal precoTotal;
+
+        private decimal PrecoTotal { get; set; }
     }
 }

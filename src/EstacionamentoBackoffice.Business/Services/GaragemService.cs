@@ -23,6 +23,11 @@ namespace EstacionamentoBackoffice.Business.Services
         {
             if (!ExecutarValidacao(new GaragemValidation(), garagem)) return;
 
+            if (_garagemRepository.Buscar(g => g.Codigo == garagem.Codigo).Result.Any())
+            {
+                Notificar("Já existe uma garagem com este código infomado.");
+                return;
+            }
 
             await _garagemRepository.Adicionar(garagem);
         }
@@ -30,6 +35,12 @@ namespace EstacionamentoBackoffice.Business.Services
         public async Task Atualizar(Garagem garagem)
         {
             if (!ExecutarValidacao(new GaragemValidation(), garagem)) return;
+
+            if (_garagemRepository.Buscar(g => g.Codigo == garagem.Codigo).Result.Any())
+            {
+                Notificar("Já existe uma garagem com este código infomado.");
+                return;
+            }
 
             await _garagemRepository.Atualizar(garagem);
         }

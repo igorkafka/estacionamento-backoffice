@@ -9,6 +9,7 @@ namespace EstacionamentoBackoffice.Business.Models
 {
     public class Garagem : Entity
     {
+        public string Codigo { get; set; }
         public string Nome { get; set; }
         public decimal PrecoUmaHora { get; set; }
         public decimal PrecoHorasExtra { get; set; }

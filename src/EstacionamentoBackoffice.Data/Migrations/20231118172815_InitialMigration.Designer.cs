@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EstacionamentoBackoffice.Data.Migrations
 {
     [DbContext(typeof(MeuDbContext))]
-    [Migration("20231117002832_InitialMigration")]
+    [Migration("20231118172815_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,6 +74,14 @@ namespace EstacionamentoBackoffice.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
                     b.Property<decimal>("PrecoHorasExtra")
                         .HasColumnType("decimal(18,2)");
 
@@ -85,16 +93,17 @@ namespace EstacionamentoBackoffice.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Codigo")
+                        .IsUnique();
+
                     b.ToTable("Garagens", (string)null);
                 });
 
             modelBuilder.Entity("EstacionamentoBackoffice.Business.Models.Passagem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CarroId")
                         .HasColumnType("uniqueidentifier");

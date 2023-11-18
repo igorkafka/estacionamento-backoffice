@@ -77,10 +77,10 @@ namespace EstacionamentoBackoffice.API.Configuration
         {
             var info = new OpenApiInfo()
             {
-                Title = "API - desenvolvedor.io",
+                Title = "API - Criada por Igor",
                 Version = description.ApiVersion.ToString(),
-                Description = "Esta API faz parte do curso REST com ASP.NET Core WebAPI.",
-                Contact = new OpenApiContact() { Name = "Eduardo Pires", Email = "contato@desenvolvedor.io" },
+                Description = "Esta API é dedicada a resolver teste da Digital Republic.",
+                Contact = new OpenApiContact() { Name = "Igor", Email = "https://www.linkedin.com/in/igor-matheus-0453541b4/?locale=en_US" },
                 License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
             };
 

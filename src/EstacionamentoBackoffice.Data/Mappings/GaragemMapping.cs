@@ -15,6 +15,12 @@ namespace EstacionamentoBackoffice.Data.Mappings
         {
             builder.HasKey(p => p.Id);
 
+            builder.HasIndex(p => p.Codigo).IsUnique();
+
+            builder.Property(c => c.Codigo)
+            .IsRequired()
+            .HasColumnType("varchar(10)");
+
             builder.Property(c => c.Nome)
             .IsRequired()
             .HasColumnType("varchar(50)");

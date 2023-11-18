@@ -16,13 +16,9 @@ namespace EstacionamentoBackoffice.Business.Models
         public Guid CarroId { get; set; }
         public DateTime DataHoraEntrada { get; set; }
         public DateTime DataHoraSaida { get; set; }
-        private decimal precoTotal;
 
-        public decimal PrecoTotal
-        {
-            get { return CalcularPrecoTotal().ArrondaPrecoTotal(); }
-            private set { precoTotal = value; }
-        }
+        public decimal PrecoTotal{ get; private set; }
+        
 
         public FormaPagamento FormaPagamento { get; set; }
         public Guid FormaPagamentoId { get; set; }
@@ -41,16 +37,16 @@ namespace EstacionamentoBackoffice.Business.Models
             return valorComCarencia;
 
         }
-        public decimal CalcularPrecoTotal()
+        public void CalcularPrecoTotal()
         {
             if (this.FormaPagamento.Codigo == "MEN")
-                return this.Garagem.PrecoMensalista;
+                this.PrecoTotal = this.Garagem.PrecoMensalista;
 
             double estadiaEmMinutos = this.CalcularEstadiaEmMinutos;
             if (estadiaEmMinutos <= 60)
-                return Garagem.PrecoUmaHora + 2;
+                this.PrecoTotal = Garagem.PrecoUmaHora + 2;
             else
-                return this.CalcularCarencia(estadiaEmMinutos) + (Garagem.PrecoUmaHora + 2);
+                this.PrecoTotal = this.CalcularCarencia(estadiaEmMinutos) + (Garagem.PrecoUmaHora + 2);
         }
 
         public static class PassagemFactory

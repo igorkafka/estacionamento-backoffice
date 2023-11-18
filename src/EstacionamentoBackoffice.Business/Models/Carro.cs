@@ -10,6 +10,7 @@ namespace EstacionamentoBackoffice.Business.Models
     {
         public string Placa { get; set; }
         public string Modelo { get; set; }
+        public string Marca { get; set; }
         public IEnumerable<Passagem> Passagens { get; set; }
         public static class CarroFactory
         {

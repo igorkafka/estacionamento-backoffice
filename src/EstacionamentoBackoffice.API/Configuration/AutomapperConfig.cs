@@ -10,9 +10,10 @@ namespace EstacionamentoBackoffice.API.Configuration
         {
             CreateMap<Carro, CarroViewModel>().ReverseMap();
             CreateMap<Garagem, GaragemViewModel>().ReverseMap();
-            CreateMap<FormaPagamento, FormaPagamento>();
+            CreateMap<FormaPagamento, FormaPagamentoViewModel>().ReverseMap();
 
-            CreateMap<Passagem, Passagem>();
+
+            CreateMap<Passagem, PassagemViewModel>().ReverseMap();
 
         }
     }

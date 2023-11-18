@@ -9,8 +9,8 @@ namespace EstacionamentoBackoffice.Business.Interfaces
 {
     public interface IPassagemService
     {
-        Task Adicionar(Passagem carro);
-        Task Atualizar(Passagem carro);
+        Task Adicionar(Passagem passagem);
+        Task Atualizar(Passagem passagem);
         Task Remover(Guid id);
     }
 }

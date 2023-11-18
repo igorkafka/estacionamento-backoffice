@@ -9,5 +9,6 @@ namespace EstacionamentoBackoffice.Business.Interfaces
 {
     public interface IPassagemRepository : IRepository<Passagem>
     {
+        Task AdicionarPassagem(Passagem passagem);
     }
 }

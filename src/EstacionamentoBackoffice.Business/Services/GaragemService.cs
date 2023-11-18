@@ -36,7 +36,7 @@ namespace EstacionamentoBackoffice.Business.Services
         {
             if (!ExecutarValidacao(new GaragemValidation(), garagem)) return;
 
-            if (_garagemRepository.Buscar(g => g.Codigo == garagem.Codigo).Result.Any())
+                       if (_garagemRepository.Buscar(g => g.Codigo == garagem.Codigo).Result.Any())
             {
                 Notificar("Já existe uma garagem com este código infomado.");
                 return;

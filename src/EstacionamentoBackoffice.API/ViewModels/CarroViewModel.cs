@@ -7,6 +7,6 @@ namespace EstacionamentoBackoffice.API.ViewModels
         public Guid Id { get; set; }
         public string Placa { get; set; }
         public string Modelo { get; set; }
-        public IEnumerable<Passagem> Passagens { get; set; }
+        public string Marca { get; set; }
     }
 }

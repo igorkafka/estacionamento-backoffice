@@ -53,10 +53,10 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
 
             return garagem;
         }
-        [HttpGet("{id:string}")]
-        public async Task<ActionResult<GaragemViewModel>> ObterPorCodigo(string id)
+        [HttpGet("{codigo}")]
+        public async Task<ActionResult<GaragemViewModel>> ObterPorCodigo(string codigo)
         {
-            var garagem = await ObterGaragemPorCodigo(id);
+            var garagem = await ObterGaragemPorCodigo(codigo);
 
             if (garagem == null) return NotFound();
 
@@ -73,7 +73,6 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             return CustomResponse(garagemViewModel);
         }
 
-        [ClaimsAuthorize("Fornecedor", "Atualizar")]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<GaragemViewModel>> Atualizar(Guid id, GaragemViewModel garagemViewModel)
         {
@@ -90,7 +89,6 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             return CustomResponse(garagemViewModel);
         }
 
-        [ClaimsAuthorize("Fornecedor", "Excluir")]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<GaragemViewModel>> Excluir(Guid id)
         {
@@ -99,6 +97,17 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             if (garagemViewModel == null) return NotFound();
 
             await _garagemService.Remover(id);
+
+            return CustomResponse(garagemViewModel);
+        }
+        [HttpDelete("{codigo}")]
+        public async Task<ActionResult<GaragemViewModel>> Excluir(string codigo)
+        {
+            var garagemViewModel = await ObterGaragemPorCodigo(codigo);
+
+            if (garagemViewModel == null) return NotFound();
+
+            await _garagemService.Remover(garagemViewModel.Id);
 
             return CustomResponse(garagemViewModel);
         }

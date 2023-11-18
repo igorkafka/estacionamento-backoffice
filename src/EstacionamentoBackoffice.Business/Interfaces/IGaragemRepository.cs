@@ -9,6 +9,6 @@ namespace EstacionamentoBackoffice.Business.Interfaces
 {
     public interface IGaragemRepository : IRepository<Garagem>
     {
-
+        Task<Garagem> ObterPorCodigo(string codigo);
     }
 }

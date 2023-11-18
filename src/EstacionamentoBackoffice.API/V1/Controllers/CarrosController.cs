@@ -4,15 +4,11 @@ using EstacionamentoBackoffice.API.Extensions;
 using EstacionamentoBackoffice.API.ViewModels;
 using EstacionamentoBackoffice.Business.Interfaces;
 using EstacionamentoBackoffice.Business.Models;
-using EstacionamentoBackoffice.Business.Services;
-using EstacionamentoBackoffice.Data.Repository;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EstacionamentoBackoffice.API.V1.Controllers
 {
-    [Authorize]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/carros")]
     public class CarrosController : MainController
@@ -44,12 +40,24 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<CarroViewModel>> ObterPorId(Guid id)
         {
-            var garagem = await ObterPorId(id);
+            var carro = await ObterCarroPorId(id);
+
+            if (carro == null) return NotFound();
+
+            return carro;
+        }
+
+        [HttpGet("{placa}")]
+        public async Task<ActionResult<CarroViewModel>> ObterPorPlaca(string placa)
+        {
+            var garagem = await ObterPorPlaca(placa);
 
             if (garagem == null) return NotFound();
 
             return garagem;
         }
+
+
 
         [HttpPost]
         public async Task<ActionResult<CarroViewModel>> Adicionar(CarroViewModel carroViewModel)
@@ -77,18 +85,40 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
 
             return CustomResponse(carroViewModel);
         }
-
-        [ClaimsAuthorize("Fornecedor", "Excluir")]
-        [HttpDelete("{id:guid}")]
-        public async Task<ActionResult<CarroViewModel>> Excluir(Guid id)
+        private async Task<CarroViewModel> ObterCarroPorId(Guid id)
         {
-            var garagemViewModel = await ObterPorId(id);
+            return _mapper.Map<CarroViewModel>(await _carroRepository.ObterPorId(id));
+        }
+        private async Task<CarroViewModel> ObterCarroPorPlaca(string placa)
+        {
+            return _mapper.Map<CarroViewModel>(await _carroRepository.ObterPorPlaca(placa));
+        }
+        [HttpDelete("{id:guid}")]
+        public async Task<ActionResult<CarroViewModel>> Excluir(Guid id, string? placa)
+        {
+            var garagemViewModel = await ObterCarroPorId(id);
 
-            if (garagemViewModel == null) return NotFound();
+            if (garagemViewModel == null) {
+                garagemViewModel =  await ObterCarroPorPlaca(placa);
+               if(garagemViewModel == null) return NotFound(); 
+               else 
+                    id = garagemViewModel.Id;
+            }
 
             await _carroRepository.Remover(id);
 
             return CustomResponse(garagemViewModel);
+        }
+        [HttpDelete("{placa}")]
+        public async Task<ActionResult<CarroViewModel>> Excluir(string placa)
+        {
+            var carroViewModel = await ObterCarroPorPlaca(placa);
+
+            if (carroViewModel == null) return NotFound();
+
+            await _carroRepository.Remover(carroViewModel.Id);
+
+            return CustomResponse(carroViewModel);
         }
     }
 }

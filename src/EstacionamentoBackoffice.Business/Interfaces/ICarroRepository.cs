@@ -9,5 +9,6 @@ namespace EstacionamentoBackoffice.Business.Interfaces
 {
     public interface ICarroRepository : IRepository<Carro>
     {
+        Task<Carro> ObterPorPlaca(string placa);
     }
 }

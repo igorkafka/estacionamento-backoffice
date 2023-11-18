@@ -54,9 +54,5 @@ namespace EstacionamentoBackoffice.Business.Services
             _carroRepository?.Dispose();
         }
 
-        public Task<Garagem> ObterPorCodigo(string codigo)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

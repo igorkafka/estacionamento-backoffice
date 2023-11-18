@@ -22,6 +22,10 @@ namespace EstacionamentoBackoffice.API.Configuration
 
             services.AddScoped<INotificador, Notificador>();
             services.AddScoped<IGaragemService, GaragemService>();
+            services.AddScoped<ICarroService, CarroService>();
+            services.AddScoped<IFormaPagamentoService, FormaPagamentoService>();
+            services.AddScoped<IPassagemService, PassagemService>();
+
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUser, AspNetUser>();

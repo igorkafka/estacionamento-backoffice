@@ -9,5 +9,6 @@ namespace EstacionamentoBackoffice.Business.Interfaces
 {
     public interface IFormaPagamentoRepository : IRepository<FormaPagamento>
     {
+        Task<FormaPagamento> ObterPorCodigo(string codigo);
     }
 }

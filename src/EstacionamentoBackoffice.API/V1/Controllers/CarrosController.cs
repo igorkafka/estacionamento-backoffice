@@ -36,6 +36,26 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
         {
             return _mapper.Map<IEnumerable<CarroViewModel>>(await _carroRepository.ObterTodos());
         }
+        [AllowAnonymous]
+        [HttpGet("carros-na-garagem")]
+        public async Task<IEnumerable<CarroViewModel>> ObterTodosObterCarrosAindaNaGaragem(DateTime dataInicial)
+        {
+            return _mapper.Map<IEnumerable<CarroViewModel>>(await _carroRepository.ObterCarrosAindaNaGaragem(dataInicial));
+        }
+        [AllowAnonymous]
+        [HttpGet("carros-fora-garagem")]
+        public async Task<IEnumerable<CarroViewModel>> ObterTodosObterCarrosForaGaragem()
+        {
+            return _mapper.Map<IEnumerable<CarroViewModel>>(await _carroRepository.ObterCarrosForaGaragem());
+        }
+        [AllowAnonymous]
+        [HttpGet("carros-periodo-garagem")]
+        public async Task<IEnumerable<CarroViewModel>> ObterTodosObterCarrosForaGaragem(DateTime dataInicial, DateTime dataFinal)
+        {
+            return _mapper.Map<IEnumerable<CarroViewModel>>(await _carroRepository.ObterCarroPorPeriodo(dataInicial, dataFinal));
+        }
+
+
 
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<CarroViewModel>> ObterPorId(Guid id)

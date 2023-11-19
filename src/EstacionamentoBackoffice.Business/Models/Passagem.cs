@@ -15,14 +15,14 @@ namespace EstacionamentoBackoffice.Business.Models
         public Carro Carro { get; set; }
         public Guid CarroId { get; set; }
         public DateTime DataHoraEntrada { get; set; }
-        public DateTime DataHoraSaida { get; set; }
+        public DateTime? DataHoraSaida { get; set; }
 
         public decimal PrecoTotal{ get; private set; }
         
 
         public FormaPagamento FormaPagamento { get; set; }
         public Guid FormaPagamentoId { get; set; }
-        private double CalcularEstadiaEmMinutos => this.DataHoraSaida.Subtract(this.DataHoraEntrada).TotalMinutes;
+        private double CalcularEstadiaEmMinutos => DataHoraSaida.Value.Subtract(DataHoraEntrada).TotalMinutes;
         private decimal CalcularCarencia(double estadiaEmMinutos)
         {
             Carencia carencia = new Carencia(this);
@@ -39,14 +39,20 @@ namespace EstacionamentoBackoffice.Business.Models
         }
         public void CalcularPrecoTotal()
         {
-            if (this.FormaPagamento.Codigo == "MEN")
-                this.PrecoTotal = this.Garagem.PrecoMensalista;
+    
 
-            double estadiaEmMinutos = this.CalcularEstadiaEmMinutos;
-            if (estadiaEmMinutos <= 60)
+            if (DataHoraSaida == null && FormaPagamento.Codigo != "MEN")
                 this.PrecoTotal = Garagem.PrecoUmaHora + 2;
+            else if (this.FormaPagamento.Codigo == "MEN")
+                this.PrecoTotal = this.Garagem.PrecoMensalista;
             else
-                this.PrecoTotal = this.CalcularCarencia(estadiaEmMinutos) + (Garagem.PrecoUmaHora + 2);
+            {
+                double estadiaEmMinutos = this.CalcularEstadiaEmMinutos;
+                if (estadiaEmMinutos <= 60)
+                    this.PrecoTotal = Garagem.PrecoUmaHora + 2;
+                else
+                    this.PrecoTotal = this.CalcularCarencia(estadiaEmMinutos) + (Garagem.PrecoUmaHora + 2);
+            }
         }
 
         public static class PassagemFactory

@@ -14,7 +14,7 @@ namespace EstacionamentoBackoffice.Domain.Tests
             _passagemValidoTestsFixture = passagemValidoTestsFixture;
         }
 
-        [Fact(DisplayName = "Realizar Passagem de Uma Hora")]
+        [Fact(DisplayName = "Realizar Passagem de Menos de Uma Hora")]
         [Trait("Categoria", "Passagem")]
         public void RealizarPassagem_SemCarencia_DeveCalcularPrecoTotal()
         {
@@ -23,6 +23,21 @@ namespace EstacionamentoBackoffice.Domain.Tests
             passagem.DataHoraEntrada = new DateTime(2023, 4, 9, 13, 30, 0);
             passagem.DataHoraSaida = new DateTime(2023, 4, 9, 14, 30, 0);
             // Act
+            passagem.CalcularPrecoTotal();
+
+            // Assert
+            Assert.Equal(42, passagem.PrecoTotal);
+        }
+        [Fact(DisplayName = "Realizar Passagem de Menos de Uma Hora")]
+        [Trait("Categoria", "Passagem")]
+        public void RealizarPassagem_DataHoraSaidaIgualNulo_DeveCalcularPrecoTotal()
+        {
+            // Arrange
+            var passagem = _passagemValidoTestsFixture.GerarPassagemValida();
+            passagem.DataHoraEntrada = new DateTime(2023, 4, 9, 13, 30, 0);
+            passagem.DataHoraSaida = null;
+            // Act
+            passagem.CalcularPrecoTotal();
 
             // Assert
             Assert.Equal(42, passagem.PrecoTotal);
@@ -36,6 +51,7 @@ namespace EstacionamentoBackoffice.Domain.Tests
             passagem.DataHoraEntrada = new DateTime(2023, 4, 9, 13, 30, 0);
             passagem.DataHoraSaida = new DateTime(2023, 4, 9, 15, 15, 0);
             // Act
+            passagem.CalcularPrecoTotal();
 
             // Assert
             Assert.Equal(47, passagem.PrecoTotal);
@@ -49,6 +65,7 @@ namespace EstacionamentoBackoffice.Domain.Tests
             passagem.DataHoraEntrada = new DateTime(2023, 4, 9, 13, 30, 0);
             passagem.DataHoraSaida = new DateTime(2023, 4, 9, 15, 30, 0);
             // Act
+            passagem.CalcularPrecoTotal();
 
             // Assert
             Assert.Equal(52, passagem.PrecoTotal);
@@ -62,6 +79,7 @@ namespace EstacionamentoBackoffice.Domain.Tests
             passagem.DataHoraEntrada = new DateTime(2023, 4, 9, 13, 30, 0);
             passagem.DataHoraSaida = new DateTime(2023, 4, 9, 16, 30, 0);
             // Act
+            passagem.CalcularPrecoTotal();
 
             // Assert
             Assert.Equal(62, passagem.PrecoTotal);
@@ -75,6 +93,7 @@ namespace EstacionamentoBackoffice.Domain.Tests
             passagem.DataHoraEntrada = new DateTime(2023, 4, 9, 13, 30, 0);
             passagem.DataHoraSaida = new DateTime(2023, 4, 9, 16, 31, 0);
             // Act
+            passagem.CalcularPrecoTotal();
 
             // Assert
             Assert.Equal(67, passagem.PrecoTotal);
@@ -88,6 +107,7 @@ namespace EstacionamentoBackoffice.Domain.Tests
             passagem.DataHoraEntrada = new DateTime(2023, 4, 9, 13, 30, 0);
             passagem.DataHoraSaida = new DateTime(2023, 4, 9, 16, 31, 0);
             // Act
+            passagem.CalcularPrecoTotal();
 
             // Assert
             Assert.Equal(passagem.PrecoTotal, 550);

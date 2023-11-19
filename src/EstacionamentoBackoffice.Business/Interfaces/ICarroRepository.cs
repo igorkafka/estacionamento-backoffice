@@ -10,5 +10,8 @@ namespace EstacionamentoBackoffice.Business.Interfaces
     public interface ICarroRepository : IRepository<Carro>
     {
         Task<Carro> ObterPorPlaca(string placa);
+        Task<IQueryable<Carro>> ObterCarroPorPeriodo(DateTime dataHoraInicial, DateTime dataHoraFinal);
+        Task<IQueryable<Carro>> ObterCarrosAindaNaGaragem(DateTime dataHoraInicial);
+        Task<IQueryable<Carro>> ObterCarrosForaGaragem();
     }
 }

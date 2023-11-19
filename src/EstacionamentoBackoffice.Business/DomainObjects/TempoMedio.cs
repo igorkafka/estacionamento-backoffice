@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EstacionamentoBackoffice.Business.Interfaces
+namespace EstacionamentoBackoffice.Business.DomainObjects
 {
-    public interface IBlogAzure
+    public class TempoMedio
     {
+        public TimeSpan Media { get; set; }
     }
 }

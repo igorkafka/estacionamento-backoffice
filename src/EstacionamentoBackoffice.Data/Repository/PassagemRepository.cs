@@ -26,5 +26,16 @@ namespace EstacionamentoBackoffice.Data.Repository
                 await context.SaveChangesAsync();
             }
         }
+
+        public async Task<List<Passagem>> ObterFechamento(DateTime dataInicial, DateTime dataFinal, string codigoPagamento)
+        {
+            return await DbSet.Where(x => x.DataHoraSaida >= dataInicial && x.DataHoraEntrada <= dataFinal && x.FormaPagamento.Codigo == codigoPagamento).ToListAsync();
+
+        }
+        public async Task<List<Passagem>> ObterFechamentoNaoMensalista(DateTime dataInicial, DateTime dataFinal)
+        {
+            return await DbSet.Where(x => x.DataHoraSaida >= dataInicial && x.DataHoraEntrada <= dataFinal && x.FormaPagamento.Codigo != "MEN").ToListAsync();
+
+        }
     }
 }

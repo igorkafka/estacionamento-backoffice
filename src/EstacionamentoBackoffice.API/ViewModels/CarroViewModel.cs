@@ -1,5 +1,4 @@
-﻿using EstacionamentoBackoffice.Business.Models;
-
+﻿
 namespace EstacionamentoBackoffice.API.ViewModels
 {
     [Serializable]

@@ -1,18 +1,10 @@
 ﻿using AutoMapper;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
 using EstacionamentoBackoffice.API.Controllers;
-using EstacionamentoBackoffice.API.Extensions;
 using EstacionamentoBackoffice.API.Interfaces;
 using EstacionamentoBackoffice.API.ViewModels;
 using EstacionamentoBackoffice.Business.Interfaces;
 using EstacionamentoBackoffice.Business.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.IO;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace EstacionamentoBackoffice.API.V1.Controllers
@@ -57,8 +49,14 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<PassagemViewModel>> ObterPorId(Guid id)
         {
-            var teste = await _blogAzure.GetBlobFileAsync("teste");
-            PassagemViewModel newDog = (PassagemViewModel)DeserializeFromStream(teste);
+            var streamBlob = await _blogAzure.GetBlobFileAsync(id.ToString());
+           
+
+            if (streamBlob != null)
+            {
+                PassagemViewModel passagemViewModel = (PassagemViewModel)DeserializeFromStream(streamBlob);
+                return passagemViewModel;
+            }
 
             return _mapper.Map<PassagemViewModel>(await _passagemRepository.ObterPorId(id));
 
@@ -96,14 +94,19 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             passagem.GaragemId = garagem.Id;
             passagem.Garagem = garagem;
             passagem.CarroId = carro.Id;
-            passagem.Carro = carro;
+            passagem.Carro = carro; 
             passagem.FormaPagamentoId = formaPagamento.Id;
             passagem.FormaPagamento = formaPagamento;
 
             var result = Task.Run(async () => await _passagemService.Adicionar(passagem));
             result.Wait();
+            passagemViewModel.Id = passagem.Id;
+            passagemViewModel.PrecoTotal = passagem.PrecoTotal;
+            passagemViewModel.Carro  = _mapper.Map<CarroViewModel>(carro);
+            passagemViewModel.Garagem = _mapper.Map<GaragemViewModel>(garagem);
+            passagemViewModel.FormaPagamento = _mapper.Map<FormaPagamentoViewModel>(formaPagamento);
 
-            await _blogAzure.CreateBlobFileAsync("teste", ObjectToByteArray(passagemViewModel));
+            await _blogAzure.CreateBlobFileAsync(passagem.Id.ToString(), ObjectToByteArray(passagemViewModel));
 
             return CustomResponse(passagemViewModel);
         }
@@ -124,7 +127,6 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             return CustomResponse(formaPagamentoViewModel);
         }
 
-        [ClaimsAuthorize("Fornecedor", "Excluir")]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<PassagemViewModel>> Excluir(Guid id)
         {

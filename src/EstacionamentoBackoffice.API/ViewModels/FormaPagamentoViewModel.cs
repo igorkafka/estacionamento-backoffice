@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EstacionamentoBackoffice.API.ViewModels
 {
+    [Serializable]
     public class FormaPagamentoViewModel
     {
         [Key]

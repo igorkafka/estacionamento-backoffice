@@ -1,12 +1,19 @@
 ﻿using AutoMapper;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using EstacionamentoBackoffice.API.Controllers;
 using EstacionamentoBackoffice.API.Extensions;
+using EstacionamentoBackoffice.API.Interfaces;
 using EstacionamentoBackoffice.API.ViewModels;
 using EstacionamentoBackoffice.Business.Interfaces;
 using EstacionamentoBackoffice.Business.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace EstacionamentoBackoffice.API.V1.Controllers
 {
@@ -19,7 +26,7 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
         private readonly IFormaPagamentoRepository _formaPagamentoRepository;
         private readonly IGaragemRepository _garagemRepository;
         private readonly ICarroRepository _carroRepository;
-
+        private readonly IBlobService _blogAzure;
         private readonly IMapper _mapper;
 
         public PassagemController(IPassagemRepository passagemRepository,
@@ -27,6 +34,7 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             IFormaPagamentoRepository formaPagamentoRepository,
             IGaragemRepository garagemRepository,
             ICarroRepository carroRepository,
+            IBlobService blogAzure,
                                       IMapper mapper,
                                       INotificador notificador,
                                       IUser user) : base(notificador, user)
@@ -37,23 +45,23 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             _carroRepository = carroRepository;
             _formaPagamentoRepository = formaPagamentoRepository;
             _garagemRepository = garagemRepository;
+            _blogAzure = blogAzure;
         }
 
-        [AllowAnonymous]
         [HttpGet]
-        public async Task<IEnumerable<FormaPagamentoViewModel>> ObterTodos()
+        public async Task<IEnumerable<PassagemViewModel>> ObterTodos()
         {
-            return _mapper.Map<IEnumerable<FormaPagamentoViewModel>>(await _passagemRepository.ObterTodos());
+            return _mapper.Map<IEnumerable<PassagemViewModel>>(await _passagemRepository.ObterTodos());
         }
 
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<PassagemViewModel>> ObterPorId(Guid id)
         {
-            var passagem = await ObterPorId(id);
+            var teste = await _blogAzure.GetBlobFileAsync("teste");
+            PassagemViewModel newDog = (PassagemViewModel)DeserializeFromStream(teste);
 
-            if (passagem == null) return NotFound();
+            return _mapper.Map<PassagemViewModel>(await _passagemRepository.ObterPorId(id));
 
-            return passagem;
         }
 
         [HttpPost]
@@ -92,13 +100,16 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             passagem.FormaPagamentoId = formaPagamento.Id;
             passagem.FormaPagamento = formaPagamento;
 
-            await _passagemService.Adicionar(passagem);
+            var result = Task.Run(async () => await _passagemService.Adicionar(passagem));
+            result.Wait();
+
+            await _blogAzure.CreateBlobFileAsync("teste", ObjectToByteArray(passagemViewModel));
 
             return CustomResponse(passagemViewModel);
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult<FormaPagamentoViewModel>> Atualizar(Guid id, FormaPagamentoViewModel formaPagamentoViewModel)
+        public async Task<ActionResult<PassagemViewModel>> Atualizar(Guid id, PassagemViewModel formaPagamentoViewModel)
         {
             if (id != formaPagamentoViewModel.Id)
             {
@@ -117,13 +128,41 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<PassagemViewModel>> Excluir(Guid id)
         {
-            var garagemViewModel = await ObterPorId(id);
+            var garagemViewModel = await ObterPassagemPorId(id);
 
             if (garagemViewModel == null) return NotFound();
 
             await _passagemService.Remover(id);
 
             return CustomResponse(garagemViewModel);
+        }
+        private async Task<PassagemViewModel> ObterPassagemPorId(Guid id)
+        {
+            return _mapper.Map<PassagemViewModel>(await _passagemRepository.ObterPorId(id));
+        }
+        private byte[] ObjectToByteArray(object obj)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                try
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    formatter.Serialize(ms, obj);
+                    byte[] byteArray = ms.ToArray();
+                    return byteArray;
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e);
+                    return null;
+                }
+            }
+        }
+        private object DeserializeFromStream(Stream stream)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            object o = formatter.Deserialize(stream);
+            return o;
         }
     }
 }

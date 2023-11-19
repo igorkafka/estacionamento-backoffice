@@ -2,6 +2,7 @@
 
 namespace EstacionamentoBackoffice.API.ViewModels
 {
+    [Serializable]
     public class CarroViewModel
     {
         public Guid Id { get; set; }

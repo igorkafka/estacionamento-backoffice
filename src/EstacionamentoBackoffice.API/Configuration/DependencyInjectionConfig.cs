@@ -1,4 +1,5 @@
-﻿using EstacionamentoBackoffice.API.Extensions;
+﻿using Azure.Storage.Blobs;
+using EstacionamentoBackoffice.API.Extensions;
 using EstacionamentoBackoffice.Business.Interfaces;
 using EstacionamentoBackoffice.Business.Notificacoes;
 using EstacionamentoBackoffice.Business.Services;

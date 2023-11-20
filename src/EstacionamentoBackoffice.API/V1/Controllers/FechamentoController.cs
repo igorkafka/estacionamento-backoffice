@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EstacionamentoBackoffice.API.V1.Controllers
 {
+    [Authorize]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/fechamentos")]
     public class FechamentoController : MainController
@@ -21,7 +22,6 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
              _fechamentoService = fechamentoService;
             _mapper = mapper;
         }
-        [AllowAnonymous]
         [HttpGet("fechamentos")]
         public async Task<FechamentoViewModel> ObterTodosObterCarrosAindaNaGaragem(DateTime dataInicial, DateTime dataFinal, string codigoPagamento)
         {

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EstacionamentoBackoffice.API.V1.Controllers
 {
+    [Authorize]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/carros")]
     public class CarrosController : MainController
@@ -30,25 +31,21 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
         }
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<CarroViewModel>> ObterTodos()
         {
             return _mapper.Map<IEnumerable<CarroViewModel>>(await _carroRepository.ObterTodos());
         }
-        [AllowAnonymous]
         [HttpGet("carros-na-garagem")]
         public async Task<IEnumerable<CarroViewModel>> ObterTodosObterCarrosAindaNaGaragem(DateTime dataInicial)
         {
             return _mapper.Map<IEnumerable<CarroViewModel>>(await _carroRepository.ObterCarrosAindaNaGaragem(dataInicial));
         }
-        [AllowAnonymous]
         [HttpGet("carros-fora-garagem")]
         public async Task<IEnumerable<CarroViewModel>> ObterTodosObterCarrosForaGaragem()
         {
             return _mapper.Map<IEnumerable<CarroViewModel>>(await _carroRepository.ObterCarrosForaGaragem());
         }
-        [AllowAnonymous]
         [HttpGet("carros-periodo-garagem")]
         public async Task<IEnumerable<CarroViewModel>> ObterTodosObterCarrosForaGaragem(DateTime dataInicial, DateTime dataFinal)
         {
@@ -89,7 +86,6 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             return CustomResponse(carroViewModel);
         }
 
-        [ClaimsAuthorize("Fornecedor", "Atualizar")]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<CarroViewModel>> Atualizar(Guid id, CarroViewModel carroViewModel)
         {

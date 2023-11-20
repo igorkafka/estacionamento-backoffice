@@ -4,11 +4,13 @@ using EstacionamentoBackoffice.API.Interfaces;
 using EstacionamentoBackoffice.API.ViewModels;
 using EstacionamentoBackoffice.Business.Interfaces;
 using EstacionamentoBackoffice.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace EstacionamentoBackoffice.API.V1.Controllers
 {
+    [Authorize]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/Passagens")]
     public class PassagemController : MainController
@@ -99,6 +101,7 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             passagem.FormaPagamento = formaPagamento;
 
             var result = Task.Run(async () => await _passagemService.Adicionar(passagem));
+
             result.Wait();
             passagemViewModel.Id = passagem.Id;
             passagemViewModel.PrecoTotal = passagem.PrecoTotal;

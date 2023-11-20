@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EstacionamentoBackoffice.API.V1.Controllers
 {
+    [Authorize]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/FormasPagamento")]
     [ApiController]
@@ -31,7 +32,6 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             _mapper = mapper;
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<FormaPagamentoViewModel>> ObterTodos()
         {
@@ -67,7 +67,6 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             return CustomResponse(formaPagamentoViewModel);
         }
 
-        [ClaimsAuthorize("Fornecedor", "Atualizar")]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<FormaPagamentoViewModel>> Atualizar(Guid id, FormaPagamentoViewModel formaPagamentoViewModel)
         {

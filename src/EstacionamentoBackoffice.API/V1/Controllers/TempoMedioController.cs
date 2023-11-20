@@ -21,19 +21,16 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             _tempoService = tempoService;
             _mapper = mapper;
         }
-        [AllowAnonymous]
         [HttpGet]
         public async Task<TempoMedioViewModel> ObterTempoMedio(DateTime dataInicial, DateTime dataFinal, string codigoPagamento)
         {
             return _mapper.Map<TempoMedioViewModel>(await _tempoService.ObterTempoMedio(dataInicial, dataFinal, codigoPagamento));
         }
-        [AllowAnonymous]
         [HttpGet("obter-tempo-medio-mensalista")]
         public async Task<TempoMedioViewModel> ObterTempoMedioMensalista(DateTime dataInicial, DateTime dataFinal)
         {
             return _mapper.Map<TempoMedioViewModel>(await _tempoService.ObterTempoMedioMensalista(dataInicial, dataFinal));
         }
-        [AllowAnonymous]
         [HttpGet("obter-tempo-nao-medio-mensalista")]
         public async Task<TempoMedioViewModel> ObterTempoMedioNaoMensalista(DateTime dataInicial, DateTime dataFinal)
         {

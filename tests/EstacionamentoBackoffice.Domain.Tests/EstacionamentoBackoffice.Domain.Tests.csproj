@@ -25,5 +25,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\EstacionamentoBackoffice.Business\EstacionamentoBackoffice.Business.csproj" />
   </ItemGroup>
-
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+  </PropertyGroup>
 </Project>

@@ -29,7 +29,6 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
            _mapper = mapper;
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<GaragemViewModel>> ObterTodos()
         {

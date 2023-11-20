@@ -75,6 +75,11 @@ namespace EstacionamentoBackoffice.API.Configuration
 
             app.UseStaticFiles();
 
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers(); // Map attribute-routed API controllers
+            });
+
             return app;
         }
     }

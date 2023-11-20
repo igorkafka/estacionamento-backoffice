@@ -72,6 +72,7 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             var carro = await _carroRepository.ObterPorPlaca(passagemViewModel.Placa);
             if (carro == null)
             {
+                NotificarErro("Carro não encontrada");
                 return NotFound();
             }
             

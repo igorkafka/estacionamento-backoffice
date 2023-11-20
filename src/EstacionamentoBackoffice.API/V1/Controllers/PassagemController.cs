@@ -139,6 +139,17 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
 
             await _passagemService.Remover(id);
 
+
+            var streamBlob = await _blogAzure.GetBlobFileAsync(id.ToString());
+
+
+            if (streamBlob != null)
+            {
+                await _blogAzure.DeleteBlobFileAsync(id.ToString());
+
+            }
+
+
             return CustomResponse(garagemViewModel);
         }
         private async Task<PassagemViewModel> ObterPassagemPorId(Guid id)

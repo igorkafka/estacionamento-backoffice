@@ -168,6 +168,8 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
             passagemViewModel.Garagem = _mapper.Map<GaragemViewModel>(garagem);
             passagemViewModel.FormaPagamento = _mapper.Map<FormaPagamentoViewModel>(formaPagamento);
 
+            await _blogAzure.DeleteBlobFileAsync(passagem.Id.ToString());
+
             await _blogAzure.CreateBlobFileAsync(passagem.Id.ToString(), ObjectToByteArray(passagemViewModel));
 
             return CustomResponse(passagemViewModel);

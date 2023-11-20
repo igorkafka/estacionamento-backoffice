@@ -33,7 +33,9 @@ namespace EstacionamentoBackoffice.Business.Services
         {
             if (!ExecutarValidacao(new PassagemValidation(), passagem)) return;
 
-            await _passagemRepository.Atualizar(passagem);
+            passagem.CalcularPrecoTotal();
+
+            await _passagemRepository.AtualizarPassagem(passagem);
         }
 
         public async Task Remover(Guid id)

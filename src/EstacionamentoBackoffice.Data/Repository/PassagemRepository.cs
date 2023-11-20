@@ -27,6 +27,19 @@ namespace EstacionamentoBackoffice.Data.Repository
             }
         }
 
+        public async Task AtualizarPassagem(Passagem passagem)
+        {
+            using (var context = Db)
+            {
+
+
+                // Attach the entity as added (detached)
+                context.Attach(passagem).State = EntityState.Modified;
+
+                await context.SaveChangesAsync();
+            }
+        }
+
         public async Task<List<Passagem>> ObterFechamento(DateTime dataInicial, DateTime dataFinal, string codigoPagamento)
         {
             return await DbSet.Where(x => x.DataHoraSaida >= dataInicial && x.DataHoraEntrada <= dataFinal && x.FormaPagamento.Codigo == codigoPagamento).ToListAsync();

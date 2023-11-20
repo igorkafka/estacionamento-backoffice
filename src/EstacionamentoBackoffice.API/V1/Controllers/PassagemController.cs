@@ -116,19 +116,61 @@ namespace EstacionamentoBackoffice.API.V1.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult<PassagemViewModel>> Atualizar(Guid id, PassagemViewModel formaPagamentoViewModel)
+        public async Task<ActionResult<PassagemViewModel>> Atualizar(Guid id, PassagemViewModel passagemViewModel)
         {
-            if (id != formaPagamentoViewModel.Id)
+            if (id != passagemViewModel.Id)
             {
                 NotificarErro("O id informado não é o mesmo que foi passado na query");
-                return CustomResponse(formaPagamentoViewModel);
+                return CustomResponse(passagemViewModel);
             }
+
 
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            await _passagemService.Atualizar(_mapper.Map<Passagem>(formaPagamentoViewModel));
+            var carro = await _carroRepository.ObterPorPlaca(passagemViewModel.Placa);
+            if (carro == null)
+            {
+                NotificarErro("Carro não encontrada");
+                return NotFound();
+            }
 
-            return CustomResponse(formaPagamentoViewModel);
+            var formaPagamento = await _formaPagamentoRepository.ObterPorCodigo(passagemViewModel.FormaPagamentoCodigo);
+
+            if (formaPagamento == null)
+            {
+                NotificarErro("Forma de Pagamento não encontrada");
+                return CustomResponse();
+            }
+
+            var garagem = await _garagemRepository.ObterPorCodigo(passagemViewModel.CodigoGarragem);
+
+            if (garagem == null)
+            {
+                NotificarErro("Garagem não encontrada");
+                return CustomResponse();
+            }
+
+            Passagem passagem = _mapper.Map<Passagem>(passagemViewModel);
+
+            passagem.GaragemId = garagem.Id;
+            passagem.Garagem = garagem;
+            passagem.CarroId = carro.Id;
+            passagem.Carro = carro;
+            passagem.FormaPagamentoId = formaPagamento.Id;
+            passagem.FormaPagamento = formaPagamento;
+
+            var result = Task.Run(async () => await _passagemService.Atualizar(passagem));
+
+            result.Wait();
+            passagemViewModel.Id = passagem.Id;
+            passagemViewModel.PrecoTotal = passagem.PrecoTotal;
+            passagemViewModel.Carro = _mapper.Map<CarroViewModel>(carro);
+            passagemViewModel.Garagem = _mapper.Map<GaragemViewModel>(garagem);
+            passagemViewModel.FormaPagamento = _mapper.Map<FormaPagamentoViewModel>(formaPagamento);
+
+            await _blogAzure.CreateBlobFileAsync(passagem.Id.ToString(), ObjectToByteArray(passagemViewModel));
+
+            return CustomResponse(passagemViewModel);
         }
 
         [HttpDelete("{id:guid}")]

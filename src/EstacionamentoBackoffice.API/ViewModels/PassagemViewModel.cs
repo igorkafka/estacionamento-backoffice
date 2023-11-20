@@ -9,7 +9,6 @@ namespace EstacionamentoBackoffice.API.ViewModels
         [Key]
         public Guid Id { get; set; }
         public GaragemViewModel? Garagem { get; set; }
-        public Guid? GaragemId { get; set; }
         public string CodigoGarragem { get; set; }
         public string FormaPagamentoCodigo { get; set; }
         public FormaPagamentoViewModel? FormaPagamento { get; set; }

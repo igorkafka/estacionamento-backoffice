@@ -42,16 +42,16 @@ namespace EstacionamentoBackoffice.Business.Models
     
 
             if (DataHoraSaida == null && FormaPagamento.Codigo != "MEN")
-                this.PrecoTotal = Garagem.PrecoUmaHora + 2;
+                this.PrecoTotal =  (Garagem.PrecoUmaHora + 2).ArrondaPrecoTotal();
             else if (this.FormaPagamento.Codigo == "MEN")
-                this.PrecoTotal = this.Garagem.PrecoMensalista;
+                this.PrecoTotal =  this.Garagem.PrecoMensalista.ArrondaPrecoTotal();
             else
             {
                 double estadiaEmMinutos = this.CalcularEstadiaEmMinutos;
                 if (estadiaEmMinutos <= 60)
-                    this.PrecoTotal = Garagem.PrecoUmaHora + 2;
+                    this.PrecoTotal = (Garagem.PrecoUmaHora + 2).ArrondaPrecoTotal();
                 else
-                    this.PrecoTotal = this.CalcularCarencia(estadiaEmMinutos) + (Garagem.PrecoUmaHora + 2);
+                    this.PrecoTotal = (this.CalcularCarencia(estadiaEmMinutos) + (Garagem.PrecoUmaHora + 2)).ArrondaPrecoTotal();
             }
         }
 
